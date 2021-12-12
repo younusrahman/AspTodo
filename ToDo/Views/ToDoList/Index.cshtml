@@ -1,0 +1,190 @@
+﻿@model IEnumerable<ToDoTasks>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div style="margin:30px 0px">
+           
+         <form class="d-flex" style="width:100%">
+        <input class="form-control me-sm-2" type="text" placeholder="Search" style="text-align:center">
+        <button class="btn btn-secondary my-2 my-sm-0" style="width:10%" asp-action="Test">Search</button>
+      </form>
+       
+        </div>
+        <div class="col-6">
+            <h2 class="text-primary">
+                ToDo - List
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="ToDoList"
+               asp-action="Create"
+            class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i>&nbsp; Add a task
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+<br />
+
+
+@{
+    bool existin = Model.Any(e => Equals(e.ComplitedDate, default(DateTime)));
+}
+
+@if (existin)
+{
+
+
+
+<table class="table table-bordered table-striped" style="width:100%"  >
+    <thead>
+        <tr class="table-primary">
+            <th style="text-align: center">
+                Title
+            </th>
+            <th style="text-align: center">
+                Details
+            </th>
+            <th style="text-align: center">
+                Created Date
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+
+
+    </thead>
+    <tbody>
+
+        @foreach(var obj in Model)
+        {
+         
+            if (Equals(obj.ComplitedDate, default(DateTime)))
+            {
+                
+               
+               <tr>
+                <td width="20%" style="text-align: center; vertical-align: middle; ">
+                    @obj.Title
+                </td>
+                <td width="60%" style="text-align: center; vertical-align: middle;">
+                    @obj.Details
+                </td>
+                <td width="20%" style="text-align: center; vertical-align: middle;">
+                    @obj.CreatedDate.ToShortDateString()
+                </td>
+                <td>
+                    <div c1ass="w-75 btn-group" role="group">
+                        <a asp-controller="ToDoList" asp-action="Done" asp-route-id="@obj.ID" class="btn btn-success mx-1"><i class="bi bi-check-circle"></i>Done</a>
+
+                    </div>
+                </td>                <td>
+                    <div c1ass="w-75 btn-group" role="group">
+                        <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.ID" class="btn btn-primary mx-1"><i class="bi bi-pen-fill"></i>Edit</a>
+
+                    </div>
+                </td>
+                   <td>
+                    <div c1ass="w-75 btn-group" role="group">
+                        <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.ID" class="btn btn-danger mx-1"><i class="bi bi-trash"></i>Delete</a>
+
+                    </div>
+                </td>
+                </tr>
+
+            }
+
+        }    
+    </tbody>
+
+</table>
+}
+
+@{
+    bool exist = Model.Any(e => !Equals(e.ComplitedDate, default(DateTime)));
+}
+
+@if (exist)
+{
+    <div class="col-6">
+            <h2 class="text-primary">
+                ToDo - Done List 
+            </h2>
+        </div>
+    <table class="table table-striped" style="width:100%"  >
+    <thead>
+        <tr class="table-primary">
+            <th style="text-align: center">
+                Title
+            </th>
+            <th style="text-align: center">
+                Details
+            </th>
+            <th style="text-align: center">
+                Created Date
+            </th>
+            <th style="text-align: center">
+                Completed Date
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+
+
+    </thead>
+    <tbody>
+
+        @foreach(var obj in Model)
+        {
+         
+            if (!Equals(obj.ComplitedDate, default(DateTime)))
+            {
+                
+               
+               <tr>
+                <td width="20%" style="text-align: center; vertical-align: middle; text-decoration: line-through;">
+                    @obj.Title
+                </td> 
+                <td width="40%" style="text-align: center; vertical-align: middle; text-decoration: line-through;">
+                    @obj.Details
+                </td>
+                <td width="20%" style="text-align: center; vertical-align: middle; text-decoration: line-through;">
+                    @obj.CreatedDate.ToShortDateString()
+                </td>
+                <td width="30%" style="text-align: center; vertical-align: middle; text-decoration: line-through;">
+                    @obj.ComplitedDate.ToShortDateString()
+                </td>
+                <td>
+                    <div c1ass="w-65 btn-group" role="group">
+                        <a asp-controller="ToDoList" asp-action="Undone" asp-route-id="@obj.ID" class="btn btn-success mx-1"><i class="bi bi-arrow-clockwise"></i>Undone</a>
+
+                    </div>
+                </td>
+                   <td>
+                    <div c1ass="w-75 btn-group" role="group">
+                        <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.ID" class="btn btn-danger mx-1"><i class="bi bi-trash"></i>Delete</a>
+
+                    </div>
+                </td>
+                </tr>
+
+            }
+
+        }    
+    </tbody>
+
+</table>
+    
+}
